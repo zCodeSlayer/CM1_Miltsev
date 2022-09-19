@@ -23,7 +23,7 @@ def find_solve(A_matrix, B_matrix):
     print(f"Вектор y: {y_vector}")
     print(f"Вектор x: {x_vector}")
 
-def find_revers_matrix(matrix):
+def find_reverse_matrix(matrix):
     pass
 
 if __name__ == '__main__':

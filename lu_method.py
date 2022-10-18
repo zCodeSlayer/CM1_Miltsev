@@ -1,4 +1,5 @@
 import numpy as np
+from numpy import linalg as la
 from matrix import Matrix
 
 class LU_Method(object):
@@ -29,7 +30,7 @@ class LU_Method(object):
     def find_x_vector(self):
         self.__find_LU()
         n = len(self.a_matrix.matrix)
-        y_vector = np.array([0 for i in range(n)])
+        y_vector = [0 for i in range(n)]
         for i in range(n):
             y_vector[i] = self.b_matrix[i] - sum([self.l_matrix[i][k] * y_vector[k] for k in range(i)])
         y_vector = np.array(y_vector, dtype=np.float64)
@@ -38,3 +39,31 @@ class LU_Method(object):
             x_vector[i] = (y_vector[i] - sum([self.u_matrix[i][k] * x_vector[k] for k in range(i + 1, n)])) / self.u_matrix[i][i]
         x_vector = np.array(x_vector, np.float64)
         return x_vector, y_vector, self.l_matrix, self.u_matrix
+
+    def find_reverse_matrix(self):
+        if self.l_matrix is None or self.u_matrix is None:
+            self.__find_LU()
+        n = len(self.a_matrix.matrix)
+        a_reverse = np.zeros((n, n), dtype=np.float64)
+        old_b_matrix = self.b_matrix.matrix.copy()
+        for i in range(n):
+            b_vector = np.zeros(n, dtype=np.float64)
+            b_vector[i] = 1
+            self.b_matrix.matrix = np.array(b_vector, dtype=np.float64)
+            x_vector, _, _, _ = self.find_x_vector()
+            for j in range(n):
+                a_reverse[i][j] = x_vector[j]
+
+        #print(a_reverse)
+        #print(a_reverse.dot(self.a_matrix.matrix))
+        self.b_matrix.matrix = old_b_matrix.copy()
+        return Matrix(a_reverse)
+
+    def find_determinant(self):
+        if self.l_matrix is None or self.u_matrix is None:
+            self.__find_LU()
+        determinant = 1
+        n = len(self.a_matrix.matrix)
+        for i in range(n):
+            determinant *= self.u_matrix[i][i]
+        return determinant

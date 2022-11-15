@@ -17,13 +17,11 @@ class LU_Method(object):
         self.l_matrix = Matrix(self.l_matrix)
 
         for i in range(n):
-            self.u_matrix[0][i] = self.a_matrix[0][i]
-            self.l_matrix[i][0] = self.a_matrix[i][0] / self.u_matrix[0][0]
-
-        for i in range(n):
             for j in range(n):
                 if i <= j:
                     self.u_matrix[i][j] = self.a_matrix[i][j] - sum([self.l_matrix[i][k] * self.u_matrix[k][j] for k in range(i)])
+                    if i == j and self.u_matrix[i][j] == 0:
+                        raise "На главной диагонали U-матрицы присутствует 0. Матрица не может быть решена методом LU-разложения"
                 if i > j:
                     self.l_matrix[i][j] = (self.a_matrix[i][j] - sum([self.l_matrix[i][k] * self.u_matrix[k][j] for k in range(j)])) / self.u_matrix[j][j]
 
@@ -52,11 +50,13 @@ class LU_Method(object):
             self.b_matrix.matrix = np.array(b_vector, dtype=np.float64)
             x_vector, _, _, _ = self.find_x_vector()
             for j in range(n):
-                a_reverse[i][j] = x_vector[j]
+                #a_reverse[i][j] = x_vector[j]
+                a_reverse[j][i] = x_vector[j]
 
         #print(a_reverse)
         #print(a_reverse.dot(self.a_matrix.matrix))
         self.b_matrix.matrix = old_b_matrix.copy()
+
         return Matrix(a_reverse)
 
     def find_determinant(self):

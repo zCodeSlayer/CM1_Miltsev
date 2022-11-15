@@ -38,7 +38,6 @@ def find_reverse_matrix(matrix):
     a_matrix = Matrix(matrix.copy())
     lu_solve = LU_Method(a_matrix, Matrix([]))
     a_revers = lu_solve.find_reverse_matrix()
-    print(a_revers)
     return a_revers
 
 
@@ -50,6 +49,7 @@ if __name__ == '__main__':
     a_norm = a_matrix.find_norm()
     a_revers_norm = a_revers.find_norm()
     condition_number = a_norm * a_revers_norm
+    print(f"Обратная матрица: \n{a_revers}")
     print(f"Норма A: {a_norm}")
     print(f"Норма A(-1): {a_revers_norm}")
     print(f"Число обусловленности: {condition_number}")

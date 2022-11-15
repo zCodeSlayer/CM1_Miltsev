@@ -1,5 +1,4 @@
 import numpy as np
-from numpy import linalg as la
 from matrix import Matrix
 
 class LU_Method(object):
@@ -50,11 +49,8 @@ class LU_Method(object):
             self.b_matrix.matrix = np.array(b_vector, dtype=np.float64)
             x_vector, _, _, _ = self.find_x_vector()
             for j in range(n):
-                #a_reverse[i][j] = x_vector[j]
                 a_reverse[j][i] = x_vector[j]
 
-        #print(a_reverse)
-        #print(a_reverse.dot(self.a_matrix.matrix))
         self.b_matrix.matrix = old_b_matrix.copy()
 
         return Matrix(a_reverse)
